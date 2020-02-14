@@ -1,0 +1,53 @@
+
+第一步:下载, 解压
+
+export FRP_VERSION='0.25.3'
+wget --no-check-certificate https://github.com/fatedier/frp/releases/download/v${FRP_VERSION}/frp_${FRP_VERSION}_linux_amd64.tar.gz
+tar -zxf frp_${FRP_VERSION}_linux_amd64.tar.gz
+mv frp_${FRP_VERSION}_linux_amd64 /var/frp
+
+第二步:修改配置文件
+命令: vim /var/frp/myfrpc.ini
+--------------------------------------
+[common]
+
+server_addr =106.12.194.135
+server_port =7000
+
+[Web]
+type = http        
+local_port =80
+custom_domains =weixin.mddmei.com
+
+
+[ssh]
+
+type = tcp
+
+local_ip = 127.0.0.1
+
+local_port = 22
+
+remote_port = 220001
+--------------------------------------
+注意：Web、gpsWeb不能重复
+
+第三步:启动frp  /var/frp/myfrpc
+
+
+(没有验证)
+第四步:添加开机自动启动
+4.1  vim /etc/rc.local
+---------------------------------------
+#!/bin/bash                                                                 nohup /var/frp/frpc -c /var/frp/myfrpc.ini >/dev/null 2>&1 &  
+---------------------------------------
+4.2  添加可执行权限：chmod +x /etc/rc.local
+ln -fs /lib/systemd/system/rc-local.service /etc/systemd/system/rc-local.service
+vim /lib/systemd/system/rc-local.service
+#新增以下代码
+[Install]  
+WantedBy=multi-user.target  
+Alias=rc-local.service 
+# 保存rc-local.service，重启
+reboot
+

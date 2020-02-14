@@ -1,0 +1,112 @@
+ubuntu16.04下安装mysql详细步骤
+
+
+
+ 
+
+ 
+
+在服务器里安装mysql
+
+依次输入这三条命令;
+
+sudo apt-get install mysql-server
+sudo apt install mysql-client
+sudo apt install libmysqlclient-dev
+
+弄完一条再弄一条。如下所示：如入命令后再输入Y
+
+然后回车就自动安装
+
+ 
+
+第二条和第三条类似这样输入看提示进行安装。在安装过程需要设置数据库密码（在键盘输入数字时不要在右边的1234567890上按数字，那里的0代表ins，要在键盘上面按1234567890，这是我家小辉经历过的）
+
+输入如下命令进行检验是否安装mysql成功。
+
+sudo netstat -tap | grep mysql
+
+如果出现如下图表示安装成功
+
+ 
+
+ 
+
+第三步，开启mysql设置旅程
+
+(实现远程控制mysql)
+
+现在设置mysql允许远程访问，首先编辑文件/etc/mysql/mysql.conf.d/mysqld.cnf：编辑配置文件就输入命令 
+
+   sudo vi /etc/mysql/mysql.conf.d/mysqld.cnf
+
+进入配置文件后 
+
+1、注释掉bind-address = 127.0.0.1：
+ 
+
+（如何注释呢？，不急，听我说.
+
+由于这个是linux系统，
+
+所以操作不同我们window
+
+我们需要通过键盘里的上下键来移动
+
+游标直到找到
+
+bind-address = 127.0.0.1这行，
+
+然后通过键盘的左右键移动到最前面。
+
+这时按键盘里的insert键切换编辑模式。
+
+ 
+
+
+注释后就切换会一般模式，也就是一开始不可编辑模式。按键盘的Esc键可进入一般模式。在一般模式下输入 : (英文下的冒号:)然后接wq都可以退出编辑文件了，即 :wq 可以保存和退出编辑模式 。      如下图
+
+ 
+
+保存退出，然后进入mysql服务执行授权命令：
+
+2、输入这条命令进入Mysql服务
+
+(mysql服务环境下得以分号结束一条命名再回车)
+
+mysql-uroot-p你的密码
+
+如我的 mysql -uroot -p123321 出现下图表示安装mysql成功，接下来就是开启远程连接数据库服务
+
+ 
+
+ 
+
+在mysql环境下执行授权命令(授权给远程任何电脑登录数据库)：
+
+输入下面的命令进行开启
+
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY '你的密码' WITH GRANT OPTION;
+
+ 
+
+
+3、刷新配置信息
+
+回车之后继续输入刷新配置命名
+
+flush privileges;    
+
+4、退出mysql服务
+
+然后输入exit命令退出mysql服务，
+
+5、执行如下命令重启mysql：
+
+service mysql restart
+
+最后就可以通过我们电脑的管理数据库可视化软件登录
+
+上我们的数据库了。其他的操作就是跟我们之前操作本地
+
+数据库一样了。
