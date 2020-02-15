@@ -1,0 +1,18 @@
+Github
+
+
+
+3、说明：其他用户拉取master   向上push 需以下几步（branch | add | commit | checkout | push）  
+     git branch newbranch
+     git branch
+     git checkout newbranch
+     git add .
+     git commit -m "1.0"    #1.0版本号
+     git status
+     git checkout master
+     git merge newbranch
+     git push -u origin master 
+
+
+
+    
